@@ -1,5 +1,9 @@
 # arista-cvp-mac-arp-per-vlan
-A script to query mac/arp information from telemetry data stored in Arista CVP platform, to count the number of unique mac and ARP entry per VLAN.
+> **Warning**
+> Disclaimer: This project is not an officially endorsed or supported Arista project, and should be treated as a best-effort initiative, without any guarantee of performance or reliability.
+
+
+A script to query mac and ARP information from telemetry data stored in Arista CVP platform, in order to count the number of unique mac and ARP entry per VLAN.
 
 
 # Installation: 
