@@ -1,1 +1,2 @@
 cloudvision==1.23.2
+grpcio>=1.67.1
