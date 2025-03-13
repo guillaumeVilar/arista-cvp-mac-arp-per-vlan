@@ -17,5 +17,5 @@ for device in device_sn_list:
 
 
 querier.print_number_of_mac_per_vlan()
-querier.print_number_of_arp_per_interface()
+querier.print_number_of_arp_per_vlan()
 querier.export_all_to_json()
