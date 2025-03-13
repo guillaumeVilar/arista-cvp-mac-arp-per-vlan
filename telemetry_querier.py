@@ -66,6 +66,10 @@ class TelemetryQuerier:
                     intfId = k["intfId"]
                     # print(f"addr: {addr} - intf {intfId}")
 
+                    # Filtering out non-SVI interfaces
+                    if not intfId.startswith("Vlan"):
+                        continue
+
                     if intfId not in self.arp_entries_per_interface.keys():
                         # Creating a set to store the arp entry for that interface
                         self.arp_entries_per_interface[intfId] = set()
