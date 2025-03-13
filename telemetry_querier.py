@@ -9,7 +9,7 @@ import json
 
 os.environ["GRPC_VERBOSITY"] = "NONE"
 mac_per_vlan_export_filename = "mac_per_vlan.json"
-arp_per_interface_export_filename = "arp_per_interface.json"
+arp_per_vlan_export_filename = "arp_per_vlan.json"
 
 class TelemetryQuerier:
     def __init__(self, cvp_ip, token):
@@ -29,7 +29,7 @@ class TelemetryQuerier:
         # Create an empty dict to store all the Ip present in each vlan in format: 
         # {Vlan100: {'10.92.64.2'}, Vlan200: {'10.92.65.174'}} 
         # This info is based on the arp entry on the aggregate switches
-        self.arp_entries_per_interface = {}
+        self.arp_entries_per_vlan = {}
 
     def store_mac_in_each_vlan_for_device(self, device):
         pathElts = [ "Smash", "bridging", "status", "smashFdbStatus" ]
@@ -70,14 +70,14 @@ class TelemetryQuerier:
                     if not intfId.startswith("Vlan"):
                         continue
 
-                    if intfId not in self.arp_entries_per_interface.keys():
+                    if intfId not in self.arp_entries_per_vlan.keys():
                         # Creating a set to store the arp entry for that interface
-                        self.arp_entries_per_interface[intfId] = set()
+                        self.arp_entries_per_vlan[intfId] = set()
 
 
 
                     # As set only store unique value, there is no need to check uniqueness
-                    self.arp_entries_per_interface[intfId].add(addr)
+                    self.arp_entries_per_vlan[intfId].add(addr)
         return
 
 
@@ -110,8 +110,8 @@ class TelemetryQuerier:
     def export_all_to_json(self):
         if self.mac_in_vlan != {}:
             self.export_result(self.mac_in_vlan, mac_per_vlan_export_filename)
-        if self.arp_entries_per_interface != {}:
-            self.export_result(self.arp_entries_per_interface, arp_per_interface_export_filename)
+        if self.arp_entries_per_vlan != {}:
+            self.export_result(self.arp_entries_per_vlan, arp_per_vlan_export_filename)
 
     def print_number_of_mac_per_vlan(self):
         print(f"===== Number of mac per VLAN =====")
@@ -119,8 +119,8 @@ class TelemetryQuerier:
             print(f"{vlan} - {len(mac_list)}")
         print(f"===== DONE Number of mac per VLAN =====")
     
-    def print_number_of_arp_per_interface(self):
-        print(f"===== Number of arp entry per interface =====")
-        for interface, arp_entry_list in self.arp_entries_per_interface.items():
+    def print_number_of_arp_per_vlan(self):
+        print(f"===== Number of arp entry per vlan =====")
+        for interface, arp_entry_list in self.arp_entries_per_vlan.items():
             print(f"{interface} - {len(arp_entry_list)}")
-        print(f"===== DONE Number of arp entry per interface =====")
+        print(f"===== DONE Number of arp entry per vlan =====")
